@@ -1,0 +1,24 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --gecko-green: #2d9d78;
+  --gecko-dark: #1a5f45;
+  --navy: #0f2942;
+  --teal-accent: #4ecdc4;
+  --gold: #e8b92d;
+  --white: #ffffff;
+  --gray-100: #f7f9fc;
+  --gray-300: #e2e8f0;
+  --gray-500: #64748b;
+}
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--gray-100);
+}
