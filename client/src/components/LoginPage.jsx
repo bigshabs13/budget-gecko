@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import './LoginPage.css'
+import { supabase } from '../supabaseClient'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
@@ -13,20 +14,41 @@ function LoginPage() {
     setMessage('')
 
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       })
-      const data = await res.json()
-      if (res.ok) {
+
+      if (error) {
+        setMessage(error.message || 'Login failed')
+      } else {
         setMessage('Login successful!')
         // Redirect or update app state here
-      } else {
-        setMessage(data.error || 'Login failed')
       }
     } catch (err) {
-      setMessage('Unable to connect to server')
+      setMessage('Unable to connect to Supabase')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleSignup = async () => {
+    setLoading(true)
+    setMessage('')
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+
+      if (error) {
+        setMessage(error.message || 'Sign up failed')
+      } else {
+        setMessage('Check your email to confirm your account')
+      }
+    } catch (err) {
+      setMessage('Unable to connect to Supabase')
     } finally {
       setLoading(false)
     }
@@ -74,8 +96,13 @@ function LoginPage() {
             <button type="submit" className="btn-login" disabled={loading}>
               {loading ? 'Signing in...' : 'Login'}
             </button>
-            <button type="button" className="btn-signup">
-              Sign up
+            <button
+              type="button"
+              className="btn-signup"
+              onClick={handleSignup}
+              disabled={loading}
+            >
+              {loading ? 'Signing up...' : 'Sign up'}
             </button>
           </form>
         </div>
